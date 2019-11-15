@@ -88,6 +88,7 @@
      * @param {function(data)} [callback] Callback w/ data
      */
     function fetchUrl(urlOpts, callback) {
+        console.log('fetchUrl', urlOpts);
         var url = typeof urlOpts === "string" ? urlOpts : urlOpts.url;
         var ua = urlOpts && urlOpts.ua;
 
@@ -139,10 +140,12 @@
 
         xhr.open("GET", url, true);
 
+        console.log("UA", ua)
         if (ua) {
             xhr.setRequestHeader("User-Agent", ua);
         }
 
+        console.log("XHR", xhr, xhr.getRequestHeader('User-Agent'));
         xhr.send();
     }
 
@@ -303,6 +306,9 @@
         // whether or not to force SSL
         var forceSSL = false;
 
+        // User agent is needed for config to succeed, default to Chrome on OSX
+        var ua = false;
+
         // config.json data
         var configJson = {};
 
@@ -370,6 +376,9 @@
             forceSSL = true;
         }
 
+        if (options.ua) {
+            ua = options.ua;
+        }
         //
         // Private Functions
         //
@@ -454,7 +463,7 @@
          * @param {string} data XHR data
          */
         function parseConfig(data) {
-            console.log('parseConfig', data)
+            console.log('parseConfig', data, options)
             try {
                 // parse the new JSON data
                 var newConfigJson = JSON.parse(data);
@@ -540,8 +549,9 @@
                 // we know that the config.json URL always has at lease one param (API key)
                 url += "&r=";
             }
-            console.log('fetchConfig', url);
-            fetchUrl(url, parseConfig);
+            var req = { url, ua };
+            console.log('fetchConfig', req);
+            fetchUrl(req, parseConfig);
         }
 
         /**
