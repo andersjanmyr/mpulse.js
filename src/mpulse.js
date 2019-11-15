@@ -454,6 +454,7 @@
          * @param {string} data XHR data
          */
         function parseConfig(data) {
+            console.log('parseConfig', data)
             try {
                 // parse the new JSON data
                 var newConfigJson = JSON.parse(data);
@@ -539,7 +540,7 @@
                 // we know that the config.json URL always has at lease one param (API key)
                 url += "&r=";
             }
-
+            console.log('fetchConfig', url);
             fetchUrl(url, parseConfig);
         }
 
