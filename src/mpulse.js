@@ -465,8 +465,8 @@
                     }
                 }
             } catch (e) {
-                warn("config.json could not be parsed!");
-
+                warn("config.json could not be parsed!" + e);
+                warn(data)
                 initialized = false;
                 return;
             }
